@@ -1,0 +1,56 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>13</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Les commentaires XML de ce SDK sont hérités d'un monorepo où ce commutateur
+         était éteint : ils n'ont donc jamais été compilés. On les publie, mais on
+         n'échoue pas sur un <param> manquant. -->
+    <NoWarn>$(NoWarn);CS1591;CS1573;CS1574;CS1712</NoWarn>
+
+    <!-- Version : un seul nombre pour les deux paquets, et l'intervalle entre eux est
+         EXACT (voir la cible du csproj de Management). Un couple dépareillé n'est pas
+         dégradé, il est silencieusement faux sur le fil.
+
+         La série commence à 3000 pour rester au-dessus de la série interne publiée sur
+         GitHub Packages : un tenant qui compare les deux flux ne doit jamais hésiter sur
+         laquelle est la plus récente. -->
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <PackagePatch Condition="'$(PackagePatch)' == ''">3000</PackagePatch>
+    <VersionSuffix>preview.$(PackagePatch)</VersionSuffix>
+
+    <Company>SCOJH CONSULT SRL</Company>
+    <Authors>SCOJH CONSULT SRL</Authors>
+    <Product>Nexus SDK</Product>
+    <Copyright>Copyright (c) 2024-2026 SCOJH CONSULT SRL. All rights reserved.</Copyright>
+
+    <!-- Licence propriétaire source-available : PackageLicenseExpression n'accepte que
+         des identifiants SPDX, donc le fichier est la seule voie. Les deux sont
+         mutuellement exclusifs (NU5035). -->
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+    <PackageProjectUrl>https://github.com/sassy-solutions/nexus-sdk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sassy-solutions/nexus-sdk</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Le source est lisible ici, donc SourceLink rend service plutôt que de fuir.
+         Les symboles, eux, ne partent pas : un .snupkg publié reste indexé à vie sur
+         nuget.org, et EmbedUntrackedSources embarquerait des fichiers hors du dépôt. -->
+    <IncludeSymbols>false</IncludeSymbols>
+    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>SassySolutions.Nexus.Sdk</PackageId>
+    <AssemblyName>Nexus.Sdk</AssemblyName>
+    <RootNamespace>Nexus.Sdk</RootNamespace>
+    <Description>Client integration surface for the Nexus platform: remote configuration, feature flags, usage and billing tracking, permission checks, health and startup registration. Carries no administration surface. Licensed for use by Nexus customers — see LICENSE.</Description>
+    <PackageTags>nexus;platform;sdk;saas;feature-flags;configuration;billing;permissions</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Nexus.Sdk.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Compendium.Abstractions.FeatureFlags" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="System.Text.Json" />
+  </ItemGroup>
+
+</Project>

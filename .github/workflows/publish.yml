@@ -1,0 +1,108 @@
+name: Publish to nuget.org
+
+on:
+  workflow_dispatch:
+    inputs:
+      patch:
+        description: "Numéro de build (VersionSuffix = preview.<patch>)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  id-token: write        # nuget.org Trusted Publishing (OIDC)
+
+jobs:
+  publish:
+    name: Pack and push
+    runs-on: ubuntu-latest
+    # Environnement à relecteur requis : la clé, si clé il y a, n'est montée
+    # qu'après approbation humaine. Une publication sur nuget.org est DÉFINITIVE —
+    # on peut dé-lister une version, jamais la supprimer.
+    environment: nuget-publish
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore, build, test
+        run: |
+          dotnet restore SassySolutions.Nexus.sln --locked-mode
+          dotnet build SassySolutions.Nexus.sln -c Release --no-restore
+          dotnet test SassySolutions.Nexus.sln -c Release --no-build
+
+      - name: Pack
+        run: |
+          PATCH="${{ inputs.patch }}"
+          [ -n "$PATCH" ] || PATCH=$((3000 + GITHUB_RUN_NUMBER))
+          echo "PATCH=$PATCH" >> "$GITHUB_ENV"
+          dotnet pack SassySolutions.Nexus.sln -c Release --no-build -o artifacts -p:PackagePatch="$PATCH"
+
+      - name: Le verrouillage de version tient
+        run: |
+          unzip -p artifacts/SassySolutions.Nexus.Management.*.nupkg '*.nuspec' \
+            | grep -q 'id="SassySolutions.Nexus.Sdk" version="\[' \
+            || { echo "::error::la dépendance fratrie n'est pas épinglée à un intervalle exact"; exit 1; }
+
+      # Ce garde est DELIBEREMENT generique. La version precedente listait les noms
+      # de nos fournisseurs et de nos namespaces pour les chercher — publiant ainsi,
+      # dans un depot public, l'inventaire exact de ce qu'on cherche a ne pas publier.
+      # La verification nominative appartient au depot prive, avant la copie.
+      - name: Aucun secret ni adresse interne dans les artefacts
+        run: |
+          mkdir -p /tmp/audit
+          for f in artifacts/*.nupkg; do unzip -qo "$f" -d "/tmp/audit/$(basename "$f" .nupkg)"; done
+          rc=0
+          # Adresses non routables depuis l'exterieur : un defaut interne qui a fuite.
+          if grep -rqiE '\.(svc|local)\b|\.internal\b|://(10|127|192\.168)\.' /tmp/audit --include='*.xml' --include='*.md' --include='*.nuspec' 2>/dev/null; then
+            echo "::error::une adresse non publique part dans un artefact"; rc=1
+          fi
+          # Formes de credentials.
+          if grep -rqE '(gh[pousr]_[A-Za-z0-9]{16}|github_pat_[A-Za-z0-9_]{20}|-----BEGIN [A-Z ]*PRIVATE KEY)' /tmp/audit 2>/dev/null; then
+            echo "::error::une forme de credential part dans un artefact"; rc=1
+          fi
+          # Symboles et sources : jamais.
+          if ls /tmp/audit/*/lib/*/*.pdb >/dev/null 2>&1; then
+            echo "::error::des symboles partent dans le paquet"; rc=1
+          fi
+          exit $rc
+
+      # Trusted Publishing : aucune clé stockée, un jeton court échangé à la volée.
+      # continue-on-error pour pouvoir retomber sur une clé si la politique n'est
+      # pas encore posée — mais l'étape suivante ÉCHOUE si les deux manquent.
+      - name: NuGet login (OIDC)
+        id: nuget-login
+        continue-on-error: true
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Push
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY || secrets.NUGET_API_KEY }}
+        run: |
+          # Le piège de SCOJH/compendium-eventsourcing : un `::warning::` ici avait
+          # masqué cinq semaines de releases vertes qui ne publiaient rien. On échoue.
+          if [ -z "$NUGET_API_KEY" ]; then
+            echo "::error::Aucun credential nuget.org : OIDC KO et NUGET_API_KEY vide."
+            echo "::error::La release ne publie RIEN. Poser une politique Trusted Publishing"
+            echo "::error::(nuget.org -> Trusted Publishing) ou le secret NUGET_API_KEY"
+            echo "::error::sur l'environnement nuget-publish."
+            exit 1
+          fi
+          dotnet nuget push "artifacts/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key "$NUGET_API_KEY" \
+            --skip-duplicate
+
+      - name: Le paquet est-il VRAIMENT en ligne ?
+        run: |
+          sleep 45
+          for p in sassysolutions.nexus.sdk sassysolutions.nexus.management; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "https://api.nuget.org/v3-flatcontainer/$p/index.json")
+            echo "$p -> HTTP $code"
+            [ "$code" = "200" ] || echo "::warning::$p pas encore visible (l'indexation peut prendre quelques minutes)"
+          done

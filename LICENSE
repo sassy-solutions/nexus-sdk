@@ -1,0 +1,142 @@
+SASSY SOLUTIONS NEXUS SDK — SOURCE-AVAILABLE LICENCE
+Version 1.0
+
+Copyright (c) 2024-2026 SCOJH CONSULT SRL. All rights reserved.
+Nexus and the Nexus SDK are commercialised under the SASSY SOLUTIONS trade name.
+
+This is NOT an open source licence. The source code of this Software is published
+so that you may read, audit and understand it. It is not published so that you may
+copy it, fork it, or build upon it.
+
+Contact: legal@scojhconsult.com
+
+--------------------------------------------------------------------------
+1. DEFINITIONS
+--------------------------------------------------------------------------
+"Licensor"          SCOJH CONSULT SRL.
+"Software"          the contents of this repository and the NuGet packages
+                    SassySolutions.Nexus.Sdk and SassySolutions.Nexus.Management,
+                    in source and binary form, including their documentation.
+"You"               the person or legal entity exercising rights under this
+                    licence; for a legal entity, together with all entities it
+                    controls, is controlled by, or is under common control with.
+"Nexus Licence"     a separate, signed, written agreement with the Licensor
+                    granting You the right to use the Nexus platform, and in
+                    force at the relevant time.
+"Your Application"  software developed by You, of which the Software is a
+                    supporting component and not a substantial part of the value.
+
+--------------------------------------------------------------------------
+2. GRANT — READING
+--------------------------------------------------------------------------
+The Licensor grants You a worldwide, royalty-free, non-exclusive,
+non-transferable licence to view, read, download and internally reproduce the
+source code of the Software for the sole purposes of evaluation, audit, security
+review, and understanding how to use the Software.
+
+This grant is available to everyone and does not require a Nexus Licence. It
+carries no right to execute the Software against a Nexus deployment.
+
+--------------------------------------------------------------------------
+3. GRANT — USE
+--------------------------------------------------------------------------
+For as long as You hold a Nexus Licence in force, and subject to section 5, the
+Licensor additionally grants You a worldwide, royalty-free, non-exclusive,
+non-transferable licence to:
+
+  (a) compile, link, execute and internally reproduce the Software as part of
+      Your Application;
+  (b) reproduce and distribute the Software in unmodified binary form, and only
+      as an embedded component of Your Application, to the users and hosting
+      environments of Your Application;
+  (c) modify the Software strictly for interoperability with, or debugging of,
+      Your Application, provided such modifications are neither distributed nor
+      made available to any third party.
+
+Section 3(b) is deliberate and necessary: it is what makes it lawful for You to
+ship an application that uses the Software. It is not a permission to distribute
+the Software on its own.
+
+--------------------------------------------------------------------------
+4. CONDITIONS
+--------------------------------------------------------------------------
+Every grant above is conditional on all of the following:
+
+  (a) You retain, in every copy You make or distribute, all copyright notices,
+      source-file headers, this licence text, and all attribution notices;
+  (b) You do not represent the Software as being open source, nor apply any other
+      licence to it;
+  (c) Your Nexus Licence is in force at the time the right is exercised.
+
+--------------------------------------------------------------------------
+5. PROHIBITIONS
+--------------------------------------------------------------------------
+You may not:
+
+  (a) distribute, publish, sublicense, sell, lease or otherwise make the Software
+      available as a standalone product, package, library, repository, mirror or
+      archive, whether or not for a fee;
+  (b) publish, distribute or make available any modified version of the Software,
+      or any work derived from it;
+  (c) use the Software, or any part of it, to develop, market or operate a
+      product or service that competes with Nexus;
+  (d) use the Software to access any Nexus deployment You are not authorised to
+      access, or to circumvent any licence key, entitlement check, usage metering
+      or access control;
+  (e) remove, alter or obscure any notice referred to in section 4(a);
+  (f) use the Software, in whole or in part, to train, fine-tune, pre-train,
+      evaluate, distil, align or otherwise develop any artificial-intelligence or
+      machine-learning model, or include it in any dataset assembled for those
+      purposes. The Licensor expressly reserves all text and data mining rights
+      within the meaning of Article 4(3) of Directive (EU) 2019/790 and any
+      equivalent provision under any other applicable law.
+
+--------------------------------------------------------------------------
+6. TERMINATION AND SURVIVAL
+--------------------------------------------------------------------------
+The grants in section 3 terminate automatically if You breach this licence and do
+not cure the breach within 30 days of becoming aware of it, and on the day Your
+Nexus Licence ceases to be in force.
+
+The grant in section 2 terminates only on breach.
+
+Copies of the Software lawfully embedded in Your Application and distributed while
+Your Nexus Licence was in force may continue to be used by their recipients under
+the terms of this licence. Termination does not require You to recall them.
+
+--------------------------------------------------------------------------
+7. THIRD-PARTY COMPONENTS
+--------------------------------------------------------------------------
+The Software depends on third-party components distributed under their own
+licences. Nothing here restricts any right granted by those licences.
+
+--------------------------------------------------------------------------
+8. NO WARRANTY
+--------------------------------------------------------------------------
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED "AS
+IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY
+AND NON-INFRINGEMENT.
+
+--------------------------------------------------------------------------
+9. LIMITATION OF LIABILITY
+--------------------------------------------------------------------------
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR SHALL NOT BE
+LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES,
+NOR FOR ANY LOSS OF PROFIT, REVENUE, DATA OR BUSINESS, ARISING OUT OF OR IN
+CONNECTION WITH THE SOFTWARE.
+
+Nothing in this section excludes or limits liability for fraud, for wilful
+misconduct, for death or personal injury caused by negligence, or any other
+liability that cannot lawfully be excluded.
+
+--------------------------------------------------------------------------
+10. GOVERNING LAW
+--------------------------------------------------------------------------
+This licence is governed by Belgian law. The competent courts of Belgium have
+exclusive jurisdiction, without prejudice to any mandatory rule of law to the
+contrary.
+
+--------------------------------------------------------------------------
+ALL RIGHTS NOT EXPRESSLY GRANTED ARE RESERVED.
+--------------------------------------------------------------------------

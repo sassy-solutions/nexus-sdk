@@ -1,0 +1,87 @@
+# conventions de forme, minimales et non négociables.
+#
+# DÉLIBÉRÉMENT PAUVRE. Le dépôt compte ~241 500 lignes de C# écrites sans
+# .editorconfig : toute règle cosmétique de masse (ordre des membres, `var` contre
+# type explicite, expression-bodied, préfixes de champs) rendrait rouge un fichier
+# sur deux, et la seule issue serait de la désactiver — donc de ne rien avoir.
+# Ce fichier ne contient que ce qui casse un diff quand on l'ignore : encodage,
+# fins de ligne, indentation, `using` ordonnés, accolades.
+#
+# Ajouter une règle ici, c'est s'engager à rendre l'arbre conforme dans la même PR.
+# Ce n'est pas un fichier où l'on note des intentions.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{yml,yaml,json,md,tsv}]
+indent_size = 2
+
+# Markdown : deux espaces en fin de ligne sont un saut de ligne significatif.
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{csproj,props,targets,sln}]
+indent_size = 2
+
+[*.cs]
+indent_size = 4
+
+# cartouche de propriete. Nexus n'est PAS open source.
+#
+# La valeur ci-dessous est une chaine LITTERALE : `file_header_template` ne
+# supporte AUCUNE substitution, ni {fileName} ni {year}. C'est pour cela que la
+# cartouche cible n'a plus d'attribut `file=` et porte une plage d'annees fixe
+# plutot qu'un millesime : ce sont les deux seules variables qui restaient, et
+# les supprimer est ce qui rend la regle applicable par l'outillage.
+#
+# Roslyn prefixe chaque ligne par "// ". Les quatre espaces en tete des lignes
+# de corps donnent donc les cinq espaces de la forme historique du depot.
+#
+# En `suggestion` : l'IDE propose la correction et les nouveaux fichiers naissent
+# conformes, sans qu'un en-tete manquant casse un `dotnet build` local. Le
+# blocage reel est en CI, par `build/cartouches.py --check`, qui couvre en plus
+# les .ts/.tsx/.js/.mjs que Roslyn ne voit pas. Passer a `error` exigerait
+# EnforceCodeStyleInBuild, propriete de compilation interdite par la regle de
+# tete de Directory.Build.props.
+file_header_template = -----------------------------------------------------------------------\n<copyright company="SCOJH CONSULT">\n    Copyright (c) 2024-2026 SCOJH CONSULT SRL. All rights reserved.\n    PROPRIETARY AND CONFIDENTIAL. Unauthorized copying, distribution or\n    use of this file, via any medium, is strictly prohibited.\n    NO AI TRAINING: this code may NOT be used to train AI/ML models.\n    See LICENSE file in the project root for full licence information.\n</copyright>\n-----------------------------------------------------------------------
+dotnet_diagnostic.IDE0073.severity = suggestion
+
+# `using` : System en tête, puis l'ordre alphabétique, hors du namespace.
+# C'est ce que le tronc du dépôt fait déjà partout.
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+csharp_using_directive_placement = outside_namespace:warning
+
+# Accolades toujours, sur leur propre ligne (style Allman), y compris pour un
+# corps d'une seule instruction : un `if` sans accolades est la porte d'entrée
+# classique d'un bug de fusion.
+csharp_new_line_before_open_brace = all
+csharp_prefer_braces = true:warning
+
+# Les deux seules règles de nommage que ce dépôt applique sans exception.
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel_case
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers =
+
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+
+dotnet_naming_rule.interfaces_start_with_i.severity = warning
+dotnet_naming_rule.interfaces_start_with_i.symbols = interfaces
+dotnet_naming_rule.interfaces_start_with_i.style = i_prefix
+
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+
+dotnet_naming_style.i_prefix.required_prefix = I
+dotnet_naming_style.i_prefix.capitalization = pascal_case

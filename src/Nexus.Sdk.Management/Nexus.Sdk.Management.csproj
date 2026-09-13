@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>SassySolutions.Nexus.Management</PackageId>
+    <!-- AssemblyName et RootNamespace restent `Nexus.Sdk.Management`, délibérément :
+         c'est ce qui garde valides tous les `using Nexus.Sdk.Management.*` existants
+         sans qu'un consommateur ait une seule ligne à changer. Seul le PackageId
+         porte le nom commercial. -->
+    <AssemblyName>Nexus.Sdk.Management</AssemblyName>
+    <RootNamespace>Nexus.Sdk.Management</RootNamespace>
+    <Description>Governance surface for the Nexus platform: organizations, projects, applications, environments, roles, git connections and platform resources — everything needed to build a Nexus administration console. Requires an administrator bearer token. Licensed for use by Nexus customers — see LICENSE.</Description>
+    <PackageTags>nexus;platform;management;governance;administration;console</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Nexus.Sdk/Nexus.Sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Nexus.Sdk.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="System.Text.Json" />
+  </ItemGroup>
+
+  <!-- Le lockstep, appliqué par NuGet et non par la discipline. Sans cette cible,
+       `dotnet pack` écrit `[1.0.0-preview.3000, )` et un consommateur peut résoudre
+       un transport plus récent sous une gouvernance plus ancienne : même fil,
+       en-têtes différents, échec muet. -->
+  <Target Name="PinSiblingPackageToExactVersion" AfterTargets="_GetProjectReferenceVersions">
+    <ItemGroup>
+      <_ProjectReferencesWithVersions Condition="'%(Filename)' == 'Nexus.Sdk'">
+        <ProjectVersion>[$(Version)]</ProjectVersion>
+      </_ProjectReferencesWithVersions>
+    </ItemGroup>
+  </Target>
+
+</Project>
