@@ -73,6 +73,14 @@ jobs:
       # Trusted Publishing : aucune clé stockée, un jeton court échangé à la volée.
       # continue-on-error pour pouvoir retomber sur une clé si la politique n'est
       # pas encore posée — mais l'étape suivante ÉCHOUE si les deux manquent.
+      # NUGET_USER doit etre le CREATEUR de la politique (un compte personnel),
+      # PAS son proprietaire. La documentation ne le dit nulle part ; seule l'erreur
+      # le dit, et seulement apres coup :
+      #   Token exchange failed (HTTP 401) ... Make sure you are using the username
+      #   of the policy creator, not the policy owner: No matching trust policy
+      #   owned by user 'SassySolutions' was found.
+      # La politique appartient bien a l'organisation SassySolutions ; c'est la
+      # valeur envoyee ici qui doit etre le compte qui l'a creee.
       - name: NuGet login (OIDC)
         id: nuget-login
         continue-on-error: true
